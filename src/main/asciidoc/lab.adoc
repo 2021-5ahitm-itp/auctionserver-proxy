@@ -1,0 +1,38 @@
+= Beispiel - Observer Pattern
+
+Ziel dieser Übung ist die praktische Anwendung des Observer-Patterns anhand eines einfachen Beispiels
+auf Basis von Quarkus.
+
+
+=== Ausgangslage
+
+Sie haben für einen Kunden eine auf Quarkus basierende Webapplikation erstellt, über welche Auktionen abgewickelt werden können.
+Da alle Teilnehmer laufend über den Fortschritt der aktuell laufenden Auktion informiert werden sollen, entscheiden Sie sich
+die Schnittstelle zu den Clients mit WebSockets zu realisieren.
+
+Die Applikation besteht aus 2 Klassen:
+
+* AuctionService: Beinhaltet die Logik zur Abwicklung der Auktionen, wobei ein neues Gebot über die Methode makeBid abgegeben werden kann
+* AutionWebSocket: Anbindung der Clients über WebSockets, benachrichtigung der Clients bei neuem Höchstgebot
+
+[plantuml,"clsdiag"]
+----
+class AuctionService
+class AuctionWebSocket
+AuctionWebSocket *- AuctionService : uses >
+
+AuctionService : boolean makeBid(String userName, int newBid)
+AuctionService : Optional<String> getWinningBidder()
+----
+
+=== Aufgabenstellung
+
+Implementieren Sie zusätzlich zum WebSocket-Endpoint einen REST-Endpoint.
+Über diesen Endpoint sollen Gebote abgegeben werden können, bei einem neuen Höchstgebot reicht es aus,
+nur die WebSocket-Clients zu benachrichtigen.
+
+Beachten Sie bei Ihrem Design / Ihrer Umsetzung die Einhaltung der Prinzipien:
+
+* Separation of Concerns, Single Responsibility (das AuctionService kümmert sich nur um die Auktion, die EndPoints nur um die Anbindung der Clients)
+* Lose Kopplung (das AuctionService soll auch weiterhin ohne die EndPoints verwendet und kompiliert werden können)
+
